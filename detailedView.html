@@ -1,444 +1,430 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <title>Vue détaillée - Droits & Obligations</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <title>Vue détaillée - Droits & Obligations</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #2d2d2d; /* Soft pink background */
-            color: #333;
-            padding: 20px;
-            line-height: 1.6;
-        }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #2d2d2d;
+      color: #333;
+      padding: 20px;
+      line-height: 1.6;
+    }
 
-        /* Sankey Container */
-        .sankey-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            margin-top: 20px;
-        }
+    /* Sankey Container */
+    .sankey-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
-        /* Tooltip Style */
-        #tooltip {
-            background: #e30613; /* Vibrant red for contrast */
-            color: #fff;
-            border-radius: 4px;
-            padding: 8px 12px;
-            font-size: 14px;
-            display: inline-block;
-            position: absolute;
-            z-index: 1000;
-            visibility: hidden; /* Keep hidden until needed */
-        }
+    /* Tooltip Style */
+    #tooltip {
+      background: #e30613;
+      color: #fff;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 14px;
+      display: inline-block;
+      position: absolute;
+      z-index: 1000;
+      visibility: hidden;
+    }
 
-        /* Select Dropdown */
-        select {
-            padding: 8px;
-            border-radius: 4px;
-            border: none; /* Remove border */
-            font-size: 16px;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: #9ecfab; /* Light green for select */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            color: #333;
-        }
+    /* Global select style (if needed elsewhere) */
+    select {
+      padding: 8px;
+      border-radius: 4px;
+      border: none;
+      font-size: 16px;
+      background-color: #9ecfab;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      color: #333;
+    }
 
-        /* Hover Effects */
-        .node rect:hover {
-            fill-opacity: 0.8;
-            cursor: pointer;
-        }
+    /* Override select for feedback panel */
+    #feedback-panel select {
+      position: static;
+      width: 100%;
+      margin-bottom: 15px;
+      background-color: #fff;
+      box-shadow: none;
+      border: 1px solid #ccc;
+    }
 
-        /* Node and Link Styles */
-        .node rect {
-            stroke: #fff;
-            stroke-width: 2px;
-        }
+    .node rect:hover {
+      fill-opacity: 0.8;
+      cursor: pointer;
+    }
 
-        .link {
-            stroke: #de8500; /* Mustard color for links */
-            stroke-opacity: 0.7;
-        }
+    .node rect {
+      stroke: #fff;
+      stroke-width: 2px;
+    }
 
-        /* Text Style */
-        text {
-            fill: #333;
-            font-weight: bold;
-        }
+    .link {
+      stroke: #de8500;
+      stroke-opacity: 0.7;
+    }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .sankey-container {
-                margin: 10px;
-                flex-direction: column;
-            }
-            select {
-                width: calc(100% - 40px);
-            }
-        }
+    text {
+      fill: #333;
+      font-weight: bold;
+      font-size: 12px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 140px;
+    }
 
-        /* Override for select elements inside the feedback panel */
-        #feedback-panel select {
-            position: static;
-            width: 100%;
-            margin-bottom: 15px;
-            background-color: #fff; /* or use inherit if preferred */
-            box-shadow: none;
-        }
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      .sankey-container {
+        margin: 10px;
+        flex-direction: column;
+      }
+      select {
+        width: calc(100% - 40px);
+      }
+    }
 
+    .info-box {
+      position: fixed;
+      top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: white;
+      max-height: 90vh;
+      overflow-y: auto;
+      width: 20%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    #lawRefRight { left: 10px; }
+    #lawRefObligations { right: 10px; }
 
-        #feedback-panel h3 {
-            margin-bottom: 20px;
-        }
+    /* Feedback panel styles */
+    #feedback-panel {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      width: 50%;
+      margin: 20px auto 0 auto;
+    }
 
-        #feedback-panel label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+    #feedback-panel h3 {
+      margin-bottom: 20px;
+    }
 
-        #feedback-panel textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-            margin-bottom: 0px; /* Reduce this value */
-        }
+    #feedback-panel label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
 
-        #submit-feedback {
-            padding: 10px 20px;
-            background-color: #006233;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 0px; 
-        }
+    #feedback-panel input,
+    #feedback-panel textarea,
+    #feedback-panel select {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
 
-        /* Sankey Container */
-        .sankey-container {
-            width: 100%; /* Full width to help center the diagram */
-            max-width: 1200px; /* Max width for larger screens */
-            margin: 20px auto; /* Centering the container */
-        }
+    #feedback-panel textarea {
+      height: 120px;
+      resize: vertical;
+    }
 
-        /* SVG Style */
-        svg {
-            display: block; /* Ensures no extra space below svg element */
-            margin: auto; /* Center align the SVG within its container */
-        }
+    input::placeholder,
+    textarea::placeholder {
+      font-size: 14px;
+      color: #888;
+    }
 
-        /* Text Style */
-        text {
-            font-size: 12px; /* Smaller font size for better fit */
-            text-overflow: ellipsis; /* Prevent overflow with an ellipsis */
-            overflow: hidden;
-            white-space: nowrap;
-            max-width: 140px; /* Max width for text to avoid cutting off */
-        }
+    #submit-feedback {
+      padding: 10px 20px;
+      background-color: #006233;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 0px;
+    }
 
-        /* Increase node padding if needed to prevent text cut-off */
-        /* This needs to be done in the sankey setup in your JavaScript */
-        .info-box {
-            position: fixed;
-            top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            background-color: white;
-            max-height: 90vh;
-            overflow-y: auto;
-            width: 20%;
-            text-align: center; /* Center text horizontally */
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center content vertically if there's enough space */
-        }
-
-
-        #lawRefRight { left: 10px; }
-        #lawRefObligations { right: 10px; }
-    </style>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    /* Back button */
+    #back-button {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background-color: #006233;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+  </style>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
-    <div id="lawRefRight" class="info-box">Texte de Loi Droit</div>
-    <div id="lawRefObligations" class="info-box">Texte de Loi Obligation</div>
-    <div id="sankey" class="sankey-container"></div>
-    <div id="tooltip" style="position: absolute; visibility: hidden; background: lightgrey; border: 1px solid black; padding: 5px; border-radius: 5px;"></div>
-    <a href="home.html" id="back-button" style="position: fixed; top: 10px; left: 10px; background-color: #006233; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;">Back</a>
-    
-    <<!-- Replace the old feedback panel with this markup -->
-    <div id="feedback-panel">
-        <h3>Feedback</h3>
-        <label for="user-name">Nom & Prénom</label>
-        <input type="text" id="user-name" placeholder="Enter your name">
-        
-        <label for="user-email">Adresse Mail</label>
-        <input type="email" id="user-email" placeholder="Enter your email">
-        
-        <label for="right-select">Sélectionnez le droit concerné :</label>
-        <select id="right-select">
-            <!-- Options will be populated dynamically -->
-        </select>
-        
-        <label for="feedback-text">Votre Feedback:</label>
-        <textarea id="feedback-text" placeholder="Rédigez votre feedback ici..."></textarea>
-        <button id="submit-feedback">Send Feedback</button>
-    </div>
+  <div id="lawRefRight" class="info-box">Cliquez sur un droit pour voir sa référence de loi.</div>
+  <div id="lawRefObligations" class="info-box">Cliquez sur un devoir pour voir sa référence de loi.</div>
+  <div id="sankey" class="sankey-container"></div>
+  <a href="home.html" id="back-button">Back</a>
+  <div id="tooltip" style="position: absolute; visibility: hidden; background: lightgrey; border: 1px solid black; padding: 5px; border-radius: 5px;"></div>
 
+  <!-- Feedback Panel -->
+  <div id="feedback-panel">
+    <h3>Feedback</h3>
+    <label for="user-name">Nom & Prénom</label>
+    <input type="text" id="user-name" placeholder="Enter your name">
+    <label for="user-email">Adresse Mail</label>
+    <input type="email" id="user-email" placeholder="Enter your email">
+    <!-- Now, because this is the rights view, we populate the dropdown with obligations -->
+    <label for="obligation-select">Sélectionnez le devoir concerné :</label>
+    <select id="obligation-select">
+      <!-- Options will be populated dynamically -->
+    </select>
+    <label for="feedback-text">Votre Feedback:</label>
+    <textarea id="feedback-text" placeholder="Rédigez votre feedback ici..."></textarea>
+    <button id="submit-feedback">Send Feedback</button>
+  </div>
 
-    <script>
-        emailjs.init("PgWfRZz3jiAZACZXI");
-        async function fetchData() {
-            const response = await fetch('data/output.json');
-            return await response.json();
+  <script>
+    // Initialize EmailJS
+    emailjs.init("PgWfRZz3jiAZACZXI");
+
+    async function fetchData() {
+      const response = await fetch('data/output.json');
+      return await response.json();
+    }
+
+    function getUrlParameter(name) {
+      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+      const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      const results = regex.exec(location.search);
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // In this rights view, we filter by rightId and then use the obligations from that right.
+    async function init() {
+      const rawData = await fetchData();
+      const rightId = getUrlParameter('rightId').trim();
+      // Filter rawData to find the right that matches
+      const focusedData = rawData.filter(d => d.right.trim() === rightId);
+      
+      if (focusedData.length > 0) {
+        // Draw Sankey diagram for the right (using the first match)
+        const sankeyData = transformDataForSankey(focusedData[0]);
+        drawSankey(sankeyData, focusedData[0]);
+        // Populate the dropdown with obligations from the right
+        populateObligationsDropdown(focusedData[0].obligations);
+      } else {
+        document.getElementById('sankey').innerHTML = 'No data found for this right.';
+      }
+    }
+
+    const tooltip = d3.select("#tooltip");
+
+    function transformDataForSankey(data) {
+      let nodes = [], links = [];
+      const nodeById = new Map();
+
+      // Create a node for the right
+      const rightNode = { id: data.right, type: 'right', lawRef: data.lawRef };
+      nodes.push(rightNode);
+      nodeById.set(data.right, rightNode);
+
+      // Create a node for each obligation
+      data.obligations.forEach(ob => {
+        const obNode = { id: ob.name, type: 'obligation', lawRef: ob.lawRef };
+        if (!nodeById.has(ob.name)) {
+          nodes.push(obNode);
+          nodeById.set(ob.name, obNode);
         }
+        links.push({ source: obNode, target: rightNode, value: 1 });
+      });
 
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            const results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        }
+      return { nodes, links };
+    }
 
-        async function init() {
-            const rawData = await fetchData();
-            const rightId = getUrlParameter('rightId');
-            const focusedData = rawData.filter(d => d.right === rightId);
+    function drawSankey(data, focusedData) {
+      const margin = { top: 30, right: 200, bottom: 30, left: 200 };
+      const width = 700;
+      const height = 300;
+      d3.select("#sankey").selectAll("*").remove();
+      const svg = d3.select("#sankey").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            if (focusedData.length > 0) {
-                const sankeyData = transformDataForSankey(focusedData[0]);
-                drawSankey(sankeyData, focusedData[0]);
-                populateRightsDropdown(focusedData);
-            }
-        }
+      const sankey = d3.sankey()
+          .nodeWidth(20)
+          .nodePadding(40)
+          .extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]]);
 
+      const { nodes, links } = sankey(data);
 
-        const tooltip = d3.select("#tooltip");
+      svg.append("g")
+          .selectAll("rect")
+          .data(nodes)
+          .enter().append("rect")
+          .classed("node", true)
+          .attr("x", d => d.x0)
+          .attr("y", d => d.y0)
+          .attr("height", d => d.y1 - d.y0)
+          .attr("width", sankey.nodeWidth())
+          .attr("fill", d => d.type === 'right' ? "#006233" : "#c1272d");
 
-        function transformDataForSankey(data) {
-            let nodes = [], links = [];
-            const nodeById = new Map();
+      svg.append("g")
+          .attr("fill", "none")
+          .selectAll("path")
+          .data(links)
+          .enter().append("path")
+          .classed("link", true)
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", "#76b7b2")
+          .attr("stroke-width", d => Math.max(1, d.width));
 
-            // Since data is a single object now, directly access its properties
-            const rightNode = {id: data.right, type: 'right'};
-            nodes.push(rightNode);
-            nodeById.set(data.right, rightNode);
+      svg.append("g")
+          .selectAll("text")
+          .data(nodes)
+          .enter().append("text")
+          .attr("x", d => d.type === "obligation" ? d.x0 - 10 : d.x1 + 10)
+          .attr("y", d => (d.y1 + d.y0) / 2)
+          .attr("dy", "0.35em")
+          .attr("text-anchor", d => d.type === "obligation" ? "end" : "start")
+          .text(d => d.id)
+          .style("fill", "black");
 
-            data.obligations.forEach(ob => {
-                const obNode = {id: ob.name, type: 'obligation', lawRef: ob.lawRef}; // Ensure you have the lawRef here if needed
-                if (!nodeById.has(ob.name)) {
-                    nodes.push(obNode);
-                    nodeById.set(ob.name, obNode);
-                }
-                links.push({source: obNode, target: rightNode, value: 1});
+      function resetStyles() {
+        svg.selectAll(".node, .link")
+            .style("opacity", 1);
+      }
+
+      d3.select("#sankey > svg").on("click", function(event) {
+        resetStyles();
+        tooltip.style("visibility", "hidden");
+      });
+
+      function highlightNodeAndConnections(selectedNode) {
+        const connectedNodes = new Set([selectedNode.id]);
+        svg.selectAll(".link")
+            .style("stroke-opacity", function(d) {
+              const isSourceOrTarget = d.source.id === selectedNode.id || d.target.id === selectedNode.id;
+              if (isSourceOrTarget) {
+                connectedNodes.add(d.source.id);
+                connectedNodes.add(d.target.id);
+              }
+              return isSourceOrTarget ? 0.8 : 0.1;
             });
+        svg.selectAll(".node rect")
+            .style("opacity", d => connectedNodes.has(d.id) ? 1 : 0.1);
+      }
 
-            return {nodes, links};
-        }
-
-
-        function drawSankey(data, focusedData) {
-            const margin = {top: 30, right: 200, bottom: 30, left: 200}; // Adjust as needed
-            const width = 700 
-            const height = 300 
-            d3.select("#sankey").selectAll("*").remove(); // Clear previous SVG
-            const svg = d3.select("#sankey").append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-            const svgBackground = svg.append("rect")
-                .attr("width", "100%")
-                .attr("height", "100%")
-                .attr("fill", "transparent")
-                .on("click", resetStyles);
-            const sankey = d3.sankey()
-                .nodeWidth(20)
-                .nodePadding(40)
-                .extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]]);
-
-            const {nodes, links} = sankey(data);
-
-            svg.append("g")
-                .selectAll("rect")
-                .data(nodes)
-                .enter().append("rect")
-                .classed("node", true) // Assign class here
-                .attr("x", d => d.x0)
-                .attr("y", d => d.y0)
-                .attr("height", d => d.y1 - d.y0)
-                .attr("width", sankey.nodeWidth())
-                .attr("fill", d => d.type === 'right' ? "#006233" : "#c1272d");
-
-            svg.append("g")
-                .attr("fill", "none")
-                .selectAll("path")
-                .data(links)
-                .enter().append("path")
-                .classed("link", true) // Assign class here
-                .attr("d", d3.sankeyLinkHorizontal())
-                .attr("stroke", "#76b7b2")
-                .attr("stroke-width", d => Math.max(1, d.width));
-
-            svg.append("g")
-                .selectAll("text")
-                .data(nodes)
-                .enter().append("text")
-                .attr("x", d => d.type === "obligation" ? d.x0 - 10 : d.x1 + 10) // Adjust for outside placement
-                .attr("y", d => (d.y1 + d.y0) / 2)
-                .attr("dy", "0.35em")
-                .attr("text-anchor", d => d.type === "obligation" ? "end" : "start")
-                .text(d => d.id)
-                .style("fill", "black");
-            
-            // Reset styles to default
-            function resetStyles() {
-                svg.selectAll(".node, .link")
-                    .style("opacity", 1); // Reset opacity to fully opaque
-            }
-
-            // After creating the SVG and appending the 'g' element
-            d3.select("#sankey > svg").on("click", function(event) {
-                // No need to check if the click is directly on the SVG, because this is now the desired behavior
-                resetStyles();
-                tooltip.style("visibility", "hidden");
-            });
-
-            // Highlight selected node and its connections
-            function highlightNodeAndConnections(selectedNode) {
-                const connectedNodes = new Set([selectedNode.id]);
-                
-                svg.selectAll(".link")
-                    .style("stroke-opacity", function(d) {
-                        const isSourceOrTarget = d.source.id === selectedNode.id || d.target.id === selectedNode.id;
-                        if (isSourceOrTarget) {
-                            connectedNodes.add(d.source.id);
-                            connectedNodes.add(d.target.id);
-                        }
-                        return isSourceOrTarget ? 0.8 : 0.1;
-                    });
-
-                svg.selectAll(".node rect")
-                    .style("opacity", d => connectedNodes.has(d.id) ? 1 : 0.1);
-
-            }
-
-            // Attach click event to right nodes
-            svg.selectAll(".node")
-                // Existing attributes setup for nodes...
-                .on("click", function(event, d) {
-                    if (d.type === "obligation") {
-                    // Call updateLawRefs for the clicked obligation
-                    highlightNodeAndConnections(d);
-                    const clickedObligationData = focusedData.obligations.find(ob => ob.name === d.id);
-                    if(clickedObligationData) {
-                        updateLawRefs(focusedData, clickedObligationData); // Make sure clickedObligationData is found
-                    }
-                } else {
-                    updateLawRefs(focusedData);
-                    highlightNodeAndConnections(d);
-                }
-                })
-
-            function updateLawRefs(data, clickedObligation = null) {
-                const lawRefRightElement = document.getElementById('lawRefRight');
-                const lawRefObligationsElement = document.getElementById('lawRefObligations');
-
-                // Use data.right to access the name of the right
-                lawRefRightElement.innerHTML = `<strong>${data.right}</strong><br/>${data.lawRef}`;
-
-                if (clickedObligation) {
-                    // Use clickedObligation.name to access the name of the clicked obligation and ensure lawRef is correctly accessed
-                    lawRefObligationsElement.innerHTML = `<strong>${clickedObligation.name}</strong><br/>${clickedObligation.lawRef}`;
-                }
-            }
-
-
-
-
-
-
-            // Attach click event to the SVG to reset styles when clicking outside the nodes
-            svg.on("click", resetStyles);
-
-
-
-        }
-        function populateRightsDropdown(focusedDataArray) {
-            const rightSelect = document.getElementById('right-select');
-            // Clear existing options
-            rightSelect.innerHTML = '';
-            // For rights view, focusedDataArray may contain one or several entries
-            focusedDataArray.forEach(data => {
-                const option = document.createElement('option');
-                option.value = data.right;
-                option.textContent = data.right;
-                rightSelect.appendChild(option);
-            });
-        }
-
-        // Feedback submission handler for rights
-        document.getElementById('submit-feedback').addEventListener('click', function() {
-            const userName = document.getElementById('user-name').value.trim();
-            const userEmail = document.getElementById('user-email').value.trim();
-            const feedbackText = document.getElementById('feedback-text').value.trim();
-            const rightSelect = document.getElementById('right-select');
-            const selectedRight = rightSelect.value; // Get the selected right from the dropdown
-
-            if (userName && userEmail && selectedRight && feedbackText) {
-                const templateParams = {
-                    user_name: userName,
-                    user_email: userEmail,
-                    right_name: selectedRight, // Use the selected right
-                    feedback_text: feedbackText,
-                };
-                emailjs.send("serviceO_n8bxp2s", "template_jtuka14", templateParams)
-                    .then(function(response) {
-                        console.log('SUCCESS!', response);
-                        alert('Feedback sent successfully!');
-                    }, function(error) {
-                        console.error('FAILED...', error);
-                        alert('There was an issue sending your feedback. Please try again.');
-                    });
+      svg.selectAll(".node")
+          .on("click", function(event, d) {
+            highlightNodeAndConnections(d);
+            if (d.type === "right") {
+              updateLawRefs(d);
             } else {
-                alert('Please fill in all fields.');
+              updateLawRefs();
             }
-        });
+          });
 
+      function updateLawRefs(clickedNode = null) {
+        const lawRefRightElement = document.getElementById('lawRefRight');
+        const lawRefObligationsElement = document.getElementById('lawRefObligations');
 
-        // Helper function to get URL parameters
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            const results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        if (clickedNode && clickedNode.type === "right") {
+          lawRefRightElement.innerHTML = `<strong>${clickedNode.id}<br/></strong> ${clickedNode.lawRef}`;
+        } else {
+          lawRefRightElement.innerHTML = "Cliquez sur un droit pour voir sa référence de loi.";
         }
 
-        init();
-    </script>
+        if (clickedNode && clickedNode.type === "obligation") {
+          lawRefObligationsElement.innerHTML = `<strong>${clickedNode.id}<br/></strong> ${clickedNode.lawRef}`;
+        } else {
+          // If no obligation is clicked, show the first one by default
+          if (focusedData.obligations && focusedData.obligations.length > 0) {
+            lawRefObligationsElement.innerHTML = `<strong>${focusedData.obligations[0].name}<br/></strong> ${focusedData.obligations[0].lawRef}`;
+          }
+        }
+      }
+
+      svg.on("click", resetStyles);
+    }
+
+    // Populate the dropdown with obligations from the right
+    function populateObligationsDropdown(obligations) {
+      const obligationSelect = document.getElementById('obligation-select');
+      obligationSelect.innerHTML = ''; // Clear any existing options
+      obligations.forEach(ob => {
+        const option = document.createElement('option');
+        option.value = ob.name;
+        option.textContent = ob.name;
+        obligationSelect.appendChild(option);
+      });
+    }
+
+    // Submit feedback and send email via EmailJS
+    document.getElementById('submit-feedback').addEventListener('click', function() {
+      const userName = document.getElementById('user-name').value.trim();
+      const userEmail = document.getElementById('user-email').value.trim();
+      const selectedObligation = document.getElementById('obligation-select').value.trim();
+      const feedbackText = document.getElementById('feedback-text').value.trim();
+      if (userName && userEmail && selectedObligation && feedbackText) {
+        const templateParams = {
+          user_name: userName,
+          user_email: userEmail,
+          obligation_name: selectedObligation,
+          // Optionally send the right id or lawRef as well if needed:
+          right_name: getUrlParameter('rightId').trim(),
+          feedback_text: feedbackText,
+        };
+
+        emailjs.send("serviceO_n8bxp2s", "template_jtuka14", templateParams)
+          .then(function(response) {
+            console.log('SUCCESS!', response);
+            alert('Feedback sent successfully!');
+          }, function(error) {
+            console.error('FAILED...', error);
+            alert('There was an issue sending your feedback. Please try again.');
+          });
+      } else {
+        alert('Please fill in all fields.');
+      }
+    });
+
+    init();
+  </script>
 </body>
 </html>
