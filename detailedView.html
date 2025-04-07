@@ -152,16 +152,25 @@
     <div id="tooltip" style="position: absolute; visibility: hidden; background: lightgrey; border: 1px solid black; padding: 5px; border-radius: 5px;"></div>
     <a href="home.html" id="back-button" style="position: fixed; top: 10px; left: 10px; background-color: #006233; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;">Back</a>
     
+    <<!-- Replace the old feedback panel with this markup -->
     <div id="feedback-panel" style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; width: 50%; margin: auto; margin-top: 20px;">
         <h3>Feedback</h3>
         <label for="user-name">Nom & Prénom</label>
         <input type="text" id="user-name" placeholder="Enter your name">
+        
         <label for="user-email">Adresse Mail</label>
         <input type="email" id="user-email" placeholder="Enter your email">
+        
+        <label for="right-select">Sélectionnez le droit concerné :</label>
+        <select id="right-select">
+            <!-- Options will be populated dynamically -->
+        </select>
+        
         <label for="feedback-text">Votre Feedback:</label>
         <textarea id="feedback-text" placeholder="Rédigez votre feedback ici..."></textarea>
         <button id="submit-feedback">Send Feedback</button>
-      </div>
+    </div>
+
 
     <script>
         emailjs.init("PgWfRZz3jiAZACZXI");
@@ -183,10 +192,12 @@
             const focusedData = rawData.filter(d => d.right === rightId);
 
             if (focusedData.length > 0) {
-                const sankeyData = transformDataForSankey(focusedData[0]); // Assuming the first item is what you want
-                drawSankey(sankeyData, focusedData[0]); // Pass focusedData[0] as argument
+                const sankeyData = transformDataForSankey(focusedData[0]);
+                drawSankey(sankeyData, focusedData[0]);
+                populateRightsDropdown(focusedData);
             }
         }
+
 
         const tooltip = d3.select("#tooltip");
 
@@ -339,16 +350,32 @@
 
 
         }
+        function populateRightsDropdown(focusedDataArray) {
+            const rightSelect = document.getElementById('right-select');
+            // Clear existing options
+            rightSelect.innerHTML = '';
+            // For rights view, focusedDataArray may contain one or several entries
+            focusedDataArray.forEach(data => {
+                const option = document.createElement('option');
+                option.value = data.right;
+                option.textContent = data.right;
+                rightSelect.appendChild(option);
+            });
+        }
+
         // Feedback submission handler for rights
         document.getElementById('submit-feedback').addEventListener('click', function() {
             const userName = document.getElementById('user-name').value.trim();
             const userEmail = document.getElementById('user-email').value.trim();
             const feedbackText = document.getElementById('feedback-text').value.trim();
-            if (userName && userEmail && feedbackText) {
+            const rightSelect = document.getElementById('right-select');
+            const selectedRight = rightSelect.value; // Get the selected right from the dropdown
+
+            if (userName && userEmail && selectedRight && feedbackText) {
                 const templateParams = {
                     user_name: userName,
                     user_email: userEmail,
-                    right_name: getUrlParameter('rightId'), // Right identifier from URL
+                    right_name: selectedRight, // Use the selected right
                     feedback_text: feedbackText,
                 };
                 emailjs.send("serviceO_n8bxp2s", "template_jtuka14", templateParams)
@@ -363,6 +390,7 @@
                 alert('Please fill in all fields.');
             }
         });
+
 
         // Helper function to get URL parameters
         function getUrlParameter(name) {
