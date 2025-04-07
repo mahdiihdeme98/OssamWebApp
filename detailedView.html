@@ -96,13 +96,15 @@
             }
         }
 
-        #feedback-panel {
-            background-color: #f9f9f9; /* Light gray background */
-            padding: 20px;
-            border-radius: 10px;
-            width: 50%;
-            margin: auto;
+        /* Override for select elements inside the feedback panel */
+        #feedback-panel select {
+            position: static;
+            width: 100%;
+            margin-bottom: 15px;
+            background-color: #fff; /* or use inherit if preferred */
+            box-shadow: none;
         }
+
 
         #feedback-panel h3 {
             margin-bottom: 20px;
