@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <script>
+        (function () {
+          const isMobile = window.innerWidth <= 768 ||
+                           /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+                             .test(navigator.userAgent);
+          if (isMobile && !location.pathname.endsWith('mobile.html')) {
+            // prevents endless loop if user already on mobile page
+            location.replace('mobile.html');
+          }
+        })();
+      </script>      
     <title>Home - Droits & Obligations</title>
     <style>
         * {

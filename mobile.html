@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <title>Home ‑ Droits & Obligations</title>
+
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <style>
+        /* ============ 1) GLOBAL RESET ============ */
+        *{box-sizing:border-box;margin:0;padding:0;}
+        html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;background:#f4f4f4;color:#333;line-height:1.5;text-align:center;padding:20px;}
+        img{max-width:100%;display:block;}
+
+        /* ============ 2) INTRO SECTION ============ */
+        .container{max-width:900px;margin:40px auto;background:#fff;padding:40px;border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,.05);}
+        .logo{width:200px;margin:0 auto 20px;}
+        h1{font-size:28px;font-weight:600;margin-bottom:16px;}
+        p{font-size:17px;color:#555;margin-bottom:16px;}
+        .start-button{display:inline-block;padding:12px 24px;font-size:16px;color:#fff;background:#006233;border:none;border-radius:8px;cursor:pointer;transition:background-color .2s;}
+        .start-button:hover{background:#004d1a;}
+        .section{margin-top:40px;padding-top:20px;border-top:1px solid #eee;text-align:left;}
+        .section h2{font-size:22px;margin-bottom:12px;color:#333;}
+
+        /* ============ 3) EXPLORER SCREEN ============ */
+        #explorer-screen{display:none;max-width:900px;margin:40px auto;background:#fff;border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,.05);padding:40px;text-align:left;}
+        .header-explorer{text-align:center;position:relative;margin-bottom:20px;}
+        .logo-explorer{width:180px;margin:0 auto 4px;}
+        .stylish-separator{border:0;height:1px;width:100%;background:linear-gradient(to right,transparent,#ccc,transparent);margin:16px 0 30px;}
+        .back-button{display:inline-block;margin-top:8px;padding:8px 16px;background:#f2f2f2;border:none;border-radius:8px;color:#333;font-size:14px;cursor:pointer;transition:.2s;}
+        .back-button:hover{background:#e0e0e0;}
+
+        .step-heading{font-size:20px;font-weight:600;margin-bottom:10px;text-align:center;}
+        .step-subtitle{font-size:15px;color:#777;text-align:center;margin-bottom:20px;}
+
+        /* ============ 4) LISTS & CARDS ============ */
+        ul{list-style:none;padding:0;margin:0;}
+        li{margin-bottom:16px;}
+        .card{background:#fff;border-radius:8px;padding:16px;box-shadow:0 2px 4px rgba(0,0,0,.05);cursor:pointer;transition:.2s;}
+        .card:hover{transform:translateY(-2px);box-shadow:0 6px 12px rgba(0,0,0,.07);}
+        .card h3{font-size:16px;color:#333;margin-bottom:6px;}
+        .card p{margin:0;font-size:14px;color:#666;}
+        .obligation-toggle{display:flex;align-items:center;justify-content:space-between;}
+        .obligation-content{display:none;margin-top:12px;font-size:14px;color:#444;}
+        .obligation-content.active{display:block;}
+
+        /* ============ 5) FEEDBACK PANEL (Step 3 only) ============ */
+        #feedback-panel{display:none;margin-top:30px;padding:20px;background:#f9f9f9;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.05);}
+        .fp-title{text-align:center;margin-bottom:14px;font-size:18px;font-weight:600;}
+        #feedback-panel label{display:block;font-weight:600;margin-bottom:4px;text-align:left;font-size:14px;}
+        #feedback-panel input,#feedback-panel textarea,#feedback-panel select{width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;font-size:14px;margin-bottom:14px;}
+        #feedback-panel textarea{resize:vertical;height:110px;}
+        .fp-locked{font-weight:600;color:#006233;margin-bottom:14px;text-align:left;}
+        #submit-feedback{width:100%;padding:12px;background:#006233;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}
+        #submit-feedback:active{transform:scale(.98);}
+
+        /* ============ 6) RESPONSIVE TWEAKS ============ */
+        @media(max-width:768px){
+            .container,#explorer-screen{margin:20px auto;padding:20px;}
+            .logo{width:160px;}h1{font-size:24px;}.section h2{font-size:18px;}.logo-explorer{width:140px;}
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== A) INTRO SECTION ========== -->
+<div class="container" id="intro-container">
+    <img src="Logo_Ocre.png" class="logo" alt="Logo OSSAM">
+    <h1>Bienvenue sur la plateforme Droits & Obligations</h1>
+    <p>
+        Cette plateforme vise à fournir une meilleure compréhension des liens entre 
+        les <strong>droits</strong> et les <strong>obligations</strong> au sein du cadre légal marocain. 
+        Découvrez comment chaque obligation permet d’accéder à certains droits et explorez les références légales correspondantes.
+    </p>
+    <button class="start-button" onclick="showExplorer()">Explorer</button>
+
+    <div class="section">
+        <h2>Qui sommes‑nous ?</h2>
+        <p>
+            <strong>OSSAM</strong> est une initiative portée par des jeunes Marocains visant à <strong>reconnecter la science, 
+            l'éducation et l'art</strong> pour façonner un avenir meilleur pour <strong>notre pays</strong>. 
+            En mettant en avant un <strong>référentiel de valeurs solide</strong>, OSSAM agit pour un <strong>Maroc</strong> 
+            où savoir et créativité sont au service du développement.
+        </p>
+    </div>
+    <div class="section">
+        <h2>Nos valeurs</h2>
+        <div class="values-container"><img src="values.png" alt="Nos valeurs"></div>
+    </div>
+</div>
+
+<!-- ========== B) EXPLORER SCREEN ========== -->
+<div id="explorer-screen">
+    <div class="header-explorer">
+        <img src="Logo_Ocre.png" class="logo-explorer" alt="Logo">
+        <button class="back-button" onclick="hideExplorer()">← Retour</button>
+        <hr class="stylish-separator">
+        <h2>Explorer : Droits & Obligations</h2>
+    </div>
+
+    <!-- Step 1 -->
+    <div id="clusters-view">
+        <h2 class="step-heading">Étape 1 : Choisir un Cluster</h2>
+        <p class="step-subtitle">Sélectionnez un domaine pour voir les droits associés.</p>
+        <ul id="clusters-list"></ul>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="rights-view" style="display:none;">
+        <button class="back-button" onclick="goBackToClusters()" style="margin-bottom:20px;">← Retour Clusters</button>
+        <h2 class="step-heading">Étape 2 : Choisir un Droit</h2>
+        <p class="step-subtitle">Dans le cluster <span id="current-cluster"></span></p>
+        <ul id="rights-list"></ul>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="obligations-view" style="display:none;">
+        <button class="back-button" onclick="goBackToRights()" style="margin-bottom:20px;">← Retour Droits</button>
+        <h2 class="step-heading">Étape 3 : Consulter les Obligations</h2>
+        <p class="step-subtitle">Liées au droit <span id="current-right"></span></p>
+        <ul id="obligations-list"></ul>
+
+        <!-- Feedback (visible only here) -->
+        <div id="feedback-panel">
+            <h3 class="fp-title">Donnez votre avis</h3>
+            <label>Droit concerné</label>
+            <div id="locked-right" class="fp-locked"></div>
+
+            <label for="obligation-select">Choisissez l'obligation</label>
+            <select id="obligation-select"></select>
+
+            <label for="user-name">Nom & Prénom</label>
+            <input id="user-name" type="text" placeholder="Votre nom">
+
+            <label for="user-email">Adresse mail</label>
+            <input id="user-email" type="email" placeholder="exemple@mail.com">
+
+            <label for="feedback-text">Votre feedback</label>
+            <textarea id="feedback-text" placeholder="Votre commentaire…"></textarea>
+
+            <button id="submit-feedback">Envoyer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ------------ GLOBAL STATE ------------ */
+let rawData = [];
+let currentCluster = null;
+let currentRight   = null;
+
+/* ------------ PAGE INIT ------------ */
+window.addEventListener('DOMContentLoaded', async () => {
+    rawData = await fetch('data/output.json').then(r => r.json());
+    showClusters();
+    emailjs.init('PgWfRZz3jiAZACZXI');      // EmailJS public key
+});
+
+/* ------------ NAVIGATION ------------ */
+function showExplorer(){
+    document.getElementById('intro-container').style.display='none';
+    document.getElementById('explorer-screen').style.display='block';
+}
+function hideExplorer(){
+    document.getElementById('explorer-screen').style.display='none';
+    document.getElementById('intro-container').style.display='block';
+}
+
+/* ------------ STEP 1 : CLUSTERS ------------ */
+function showClusters(){
+    toggleViews('clusters-view');
+    const ul = document.getElementById('clusters-list');
+    ul.innerHTML='';
+    [...new Set(rawData.map(d=>d.cluster))].forEach(cluster=>{
+        const li=document.createElement('li');
+        li.innerHTML=`<div class="card"><h3>${cluster}</h3></div>`;
+        li.firstChild.onclick=()=>showRights(cluster);
+        ul.appendChild(li);
+    });
+    hideFeedback();   // make sure panel is hidden
+}
+
+/* ------------ STEP 2 : RIGHTS ------------ */
+function showRights(cluster){
+    currentCluster=cluster;
+    document.getElementById('current-cluster').textContent=cluster;
+    toggleViews('rights-view');
+    const ul=document.getElementById('rights-list');
+    ul.innerHTML='';
+    rawData.filter(d=>d.cluster===cluster)
+           .forEach(item=>{
+                const li=document.createElement('li');
+                li.innerHTML=`<div class="card"><h3>${item.right}</h3><p>${item.lawRef}</p></div>`;
+                li.firstChild.onclick=()=>showObligations(item.right);
+                ul.appendChild(li);
+           });
+    hideFeedback();
+}
+function goBackToClusters(){showClusters();}
+
+/* ------------ STEP 3 : OBLIGATIONS ------------ */
+function showObligations(rightName){
+    currentRight=rightName;
+    document.getElementById('current-right').textContent=rightName;
+    toggleViews('obligations-view');
+
+    const obligationsUl=document.getElementById('obligations-list');
+    obligationsUl.innerHTML='';
+
+    const item=rawData.find(d=>d.cluster===currentCluster && d.right===rightName);
+    if(!item){obligationsUl.innerHTML='<li>Aucune obligation trouvée.</li>';hideFeedback();return;}
+
+    // list of obligations
+    item.obligations.forEach(ob=>{
+        const li=document.createElement('li');
+        li.innerHTML=`<div class="card">
+                         <div class="obligation-toggle"><h3>${ob.name}</h3><span>▼</span></div>
+                         <div class="obligation-content"><p><strong>Référence légale :</strong><br>${ob.lawRef}</p></div>
+                       </div>`;
+        const toggle=li.querySelector('.obligation-toggle');
+        const content=li.querySelector('.obligation-content');
+        toggle.onclick=()=>content.classList.toggle('active');
+        obligationsUl.appendChild(li);
+    });
+
+    // ----- FEEDBACK PANEL -----
+    const panel=document.getElementById('feedback-panel');
+    panel.style.display='block';
+    document.getElementById('locked-right').textContent=rightName;
+
+    const select=document.getElementById('obligation-select');
+    select.innerHTML='';
+    item.obligations.forEach(ob=>{
+        const opt=document.createElement('option');
+        opt.value=opt.textContent=ob.name;
+        select.appendChild(opt);
+    });
+}
+function goBackToRights(){showRights(currentCluster);}
+
+/* ------------ FEEDBACK SEND ------------ */
+document.getElementById('submit-feedback').addEventListener('click',()=>{
+    const params={
+        user_name :document.getElementById('user-name').value.trim(),
+        user_email:document.getElementById('user-email').value.trim(),
+        right_name:currentRight,
+        obligation_name:document.getElementById('obligation-select').value.trim(),
+        feedback_text:document.getElementById('feedback-text').value.trim()
+    };
+    if(Object.values(params).some(v=>!v)){
+        alert('Veuillez remplir tous les champs.');return;
+    }
+    emailjs.send('serviceO_n8bxp2s','template_jtuka14',params)
+           .then(()=>{alert('Merci pour votre retour !');clearFeedbackForm();})
+           .catch(()=>alert('Erreur lors de l’envoi, réessayez.'));
+});
+
+/* ------------ HELPERS ------------ */
+function toggleViews(idToShow){
+    ['clusters-view','rights-view','obligations-view']
+        .forEach(id=>document.getElementById(id).style.display=id===idToShow?'block':'none');
+}
+function hideFeedback(){document.getElementById('feedback-panel').style.display='none';}
+function clearFeedbackForm(){
+    ['user-name','user-email','feedback-text'].forEach(id=>document.getElementById(id).value='');
+}
+
+</script>
+</body>
+</html>
