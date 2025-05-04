@@ -91,22 +91,33 @@
             max-width: 1200px;
             margin: 20px auto;
         }
-          /* --- Back button inside the diagram --- */
-        #sankey-wrapper{position:relative;}      /* new stacking context */
+        /* ---- Info boxes stay fixed & on top ---- */
+        .info-box{ position:fixed; z-index:20; }  /* keep their z-index high */
 
+        /* ---- Sankey wrapper ---- */
+        #sankey-wrapper{ position:relative; margin-top:60px; } 
+        /* margin-top pushes the whole diagram down so it never hides the boxes */
+
+        /* ---- Top bar that holds the button ---- */
+        .sankey-topbar{
+        position:absolute;               /* inside wrapper */
+        top:-60px; left:0; right:0;      /* pulled up to sit just under fixed boxes */
+        height:40px;
+        display:flex; justify-content:center; align-items:center;
+        pointer-events:none;             /* let clicks through except on button */
+        }
+
+        /* ---- Back button ---- */
         #back-button{
-        position:absolute;
-        top:12px; left:12px;                  /* never collides with info boxes */
-        z-index:5;
-        background:#006233;
-        color:#fff;
-        padding:8px 12px;
-        border-radius:6px;
-        text-decoration:none;
-        font-size:14px;
+        pointer-events:auto;             /* restore clickability */
+        background:#006233;color:#fff;
+        padding:8px 18px;border-radius:8px;text-decoration:none;
+        font-size:16px;z-index:15;       /* below boxes(20) but above SVG */
         transition:background .2s;
         }
         #back-button:hover{background:#004d1a;}
+
+        
 
         svg {
             display: block;
@@ -203,9 +214,13 @@
   <div id="lawRefRight" class="info-box">Cliquez sur un droit pour voir sa référence de loi.</div>
   <div id="lawRefObligations" class="info-box">Cliquez sur un devoir pour voir sa référence de loi.</div>
   <div id="sankey-wrapper" class="sankey-container">
-    <a href="home.html" id="back-button">← Retour</a>
+    <div class="sankey-topbar">
+        <a href="home.html" id="back-button">← Retour</a>
+    </div>
+
     <div id="sankey"></div>
 </div>
+
   <div id="tooltip" style="position: absolute; visibility: hidden; background: lightgrey; border: 1px solid black; padding: 5px; border-radius: 5px;"></div>
 
   <!-- Feedback Panel -->
