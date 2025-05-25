@@ -316,6 +316,11 @@
 
       const { nodes, links } = sankey(data);
 
+      const rightNode = nodes.find(n => n.type === 'right'); // unique in this view
+      currentRight = rightNode;
+      updateLawRefs(rightNode);
+
+
       svg.append("g")
           .selectAll("rect")
           .data(nodes)
@@ -383,15 +388,22 @@
             }
           });
 
+      let currentRight = null;      
       function updateLawRefs(clickedNode = null) {
-        const lawRefRightElement = document.getElementById('lawRefRight');
+        const lawRefRightElement       = document.getElementById('lawRefRight');
         const lawRefObligationsElement = document.getElementById('lawRefObligations');
 
-        if (clickedNode && clickedNode.type === "right") {
-          lawRefRightElement.innerHTML = `<strong>${clickedNode.id}<br/></strong> ${clickedNode.lawRef}`;
-        } else {
-          lawRefRightElement.innerHTML = "Cliquez sur un droit pour voir sa référence de loi.";
+        /* ---------- RIGHT ---------- */
+        if (clickedNode && clickedNode.type === 'right') {
+            currentRight = clickedNode;                                    // <-- NEW
+            lawRefRightElement.innerHTML =
+                `<strong>${clickedNode.id}<br/></strong> ${clickedNode.lawRef}`;
+        } else if (!clickedNode && !currentRight) {                        // <-- CHANGED
+            // only clear if nothing has ever been selected
+            lawRefRightElement.innerHTML =
+                'Cliquez sur un droit pour voir sa référence de loi.';
         }
+
 
         if (clickedNode && clickedNode.type === "obligation") {
           lawRefObligationsElement.innerHTML = `<strong>${clickedNode.id}<br/></strong> ${clickedNode.lawRef}`;
