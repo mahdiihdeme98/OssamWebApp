@@ -300,6 +300,7 @@
 
     function drawSankey(data, focusedData) {
       const margin = { top: 30, right: 200, bottom: 30, left: 200 };
+      let currentRight = null;   
       const width = 700;
       const height = 300;
       d3.select("#sankey").selectAll("*").remove();
@@ -388,7 +389,6 @@
             }
           });
 
-      let currentRight = null;      
       function updateLawRefs(clickedNode = null) {
         const lawRefRightElement       = document.getElementById('lawRefRight');
         const lawRefObligationsElement = document.getElementById('lawRefObligations');
