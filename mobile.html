@@ -35,6 +35,14 @@
 
         .step-heading{font-size:20px;font-weight:600;margin-bottom:10px;text-align:center;}
         .step-subtitle{font-size:15px;color:#777;text-align:center;margin-bottom:20px;}
+        .right-reference{
+        font-size:14px;
+        color:#555;
+        margin-top:-8px;   /* tucks it right under the subtitle */
+        margin-bottom:20px;
+        text-align:center;
+    }
+
 
         /* ============ 4) LISTS & CARDS ============ */
         ul{list-style:none;padding:0;margin:0;}
@@ -56,6 +64,7 @@
         .fp-locked{font-weight:600;color:#006233;margin-bottom:14px;text-align:left;}
         #submit-feedback{width:100%;padding:12px;background:#006233;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}
         #submit-feedback:active{transform:scale(.98);}
+
 
         /* ============ 6) RESPONSIVE TWEAKS ============ */
         @media(max-width:768px){
@@ -121,6 +130,7 @@
         <button class="back-button" onclick="goBackToRights()" style="margin-bottom:20px;">← Retour Droits</button>
         <h2 class="step-heading">Étape 3 : Consulter les Obligations</h2>
         <p class="step-subtitle">Liées au droit <span id="current-right"></span></p>
+        <p id="current-right-ref" class="right-reference"></p>
         <ul id="obligations-list"></ul>
 
         <!-- Feedback (visible only here) -->
@@ -211,6 +221,10 @@ function showObligations(rightName){
     obligationsUl.innerHTML='';
 
     const item=rawData.find(d=>d.cluster===currentCluster && d.right===rightName);
+    // Show the legal reference just under the subtitle
+    document.getElementById('current-right-ref').textContent =
+        item ? item.lawRef : '';
+
     if(!item){obligationsUl.innerHTML='<li>Aucune obligation trouvée.</li>';hideFeedback();return;}
 
     // list of obligations
