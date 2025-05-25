@@ -497,16 +497,12 @@
         "cluster":"Droits Sociaux & Juridiques",
         "obligations": [
             {
-                "name": "???",
+                "name": "Lutter contre toute forme de discrimination",
                 "lawRef": "Projet de loi n°79-14 relatif à l’Autorité de la Parité\net de Lutte contre toutes les formes de Discrimination (APALD)"
             },
             {
-                "name": "???",
-                "lawRef": "Codd du travail Article 478:\n\"Est interdite aux agences de recrutement privées toute discrimination basée sur la race, la couleur, le sexe, la religion, l'opinion politique, l'ascendance nationale ou l'origine sociale, de nature à porter atteinte au principe de l'égalité des chances et de traitement en matière d'emploi. Il est également interdit aux agences de recrutement privées de pratiquer toute discrimination se basant sur la sélection privative de la liberté syndicale ou de la négociation collective. N'est pas considérée comme mesure discriminatoire, toute offre de service spéciale ou la réalisation de programmes destinés spécialement à aider les demandeurs d'emploi les plus défavorisés dans leur recherche d'un emploi.\""
-            },
-            {
-                "name": "???",
-                "lawRef": ""
+                "name": "Non-discrimination au recrutement",
+                "lawRef": "Code du travail Article 478:\n\"Est interdite aux agences de recrutement privées toute discrimination basée sur la race, la couleur, le sexe, la religion, l'opinion politique, l'ascendance nationale ou l'origine sociale, de nature à porter atteinte au principe de l'égalité des chances et de traitement en matière d'emploi. Il est également interdit aux agences de recrutement privées de pratiquer toute discrimination se basant sur la sélection privative de la liberté syndicale ou de la négociation collective. N'est pas considérée comme mesure discriminatoire, toute offre de service spéciale ou la réalisation de programmes destinés spécialement à aider les demandeurs d'emploi les plus défavorisés dans leur recherche d'un emploi.\""
             }
         ]
     }
