@@ -5,449 +5,179 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <title>Vue détaillée - Droits & Obligations</title>
+  <!-- ================== STYLES (unchanged) ================== -->
   <style>
-    * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #2d2d2d; 
-            color: #333;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        .sankey-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-
-        #tooltip {
-            background: #e30613; 
-            color: #fff;
-            border-radius: 4px;
-            padding: 8px 12px;
-            font-size: 14px;
-            display: inline-block;
-            position: absolute;
-            z-index: 1000;
-            visibility: hidden; 
-        }
-
-        select {
-            padding: 8px;
-            border-radius: 4px;
-            border: none;
-            font-size: 16px;
-            background-color: #9ecfab;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            color: #333;
-        }
-
-        .node rect:hover {
-            fill-opacity: 0.8;
-            cursor: pointer;
-        }
-
-        .node rect {
-            stroke: #fff;
-            stroke-width: 2px;
-        }
-
-        .link {
-            stroke: #de8500; 
-            stroke-opacity: 0.7;
-        }
-
-        text {
-            fill: #333;
-            font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .sankey-container {
-                margin: 10px;
-                flex-direction: column;
-            }
-            select {
-                width: calc(100% - 40px);
-            }
-        }
-
-        .sankey-container {
-            width: 100%; 
-            max-width: 1200px;
-            margin: 20px auto;
-        }
-        /* ---- Info boxes stay fixed & on top ---- */
-        .info-box{ position:fixed; z-index:20; }  /* keep their z-index high */
-
-        /* ---- Sankey wrapper ---- */
-        #sankey-wrapper{ position:relative; margin-top:60px; } 
-        /* margin-top pushes the whole diagram down so it never hides the boxes */
-
-        /* ---- Top bar that holds the button ---- */
-        .sankey-topbar{
-        position:absolute;               /* inside wrapper */
-        top:-60px; left:0; right:0;      /* pulled up to sit just under fixed boxes */
-        height:40px;
-        display:flex; justify-content:center; align-items:center;
-        pointer-events:none;             /* let clicks through except on button */
-        }
-
-        /* ---- Back button ---- */
-        #back-button{
-        pointer-events:auto;             /* restore clickability */
-        background:#006233;color:#fff;
-        padding:8px 18px;border-radius:8px;text-decoration:none;
-        font-size:16px;z-index:15;       /* below boxes(20) but above SVG */
-        transition:background .2s;
-        }
-        #back-button:hover{background:#004d1a;}
-
-        
-
-        svg {
-            display: block;
-            margin: auto;
-        }
-
-        text {
-            font-size: 12px;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            max-width: 140px;
-        }
-
-        .info-box {
-            position: fixed;
-            top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            background-color: white;
-            max-height: 90vh;
-            overflow-y: auto;
-            width: 20%;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        #lawRefRight { left: 10px; }
-        #lawRefObligations { right: 10px; }
-        
-        #feedback-panel {
-            background-color: #f9f9f9; /* Light gray background */
-            padding: 20px;
-            border-radius: 10px;
-            width: 50%;
-            margin: auto;
-        }
-
-        #feedback-panel h3 {
-            margin-bottom: 20px;
-        }
-
-        #feedback-panel label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        #feedback-panel textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-            margin-bottom: 0px; /* Reduce this value */
-        }
-
-        #submit-feedback {
-            padding: 10px 20px;
-            background-color: #006233;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 0px; 
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 15px; /* Add space between input fields */
-        }
-
-        textarea {
-            height: 120px;
-            resize: vertical;
-        }
-
-        input::placeholder, textarea::placeholder {
-            font-size: 14px;
-            color: #888;
-        }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#2d2d2d;color:#333;padding:20px;line-height:1.6}
+    .sankey-container{display:flex;justify-content:center;align-items:center;padding:20px;background-color:#ffffff;box-shadow:0 10px 25px rgba(0,0,0,0.1);border-radius:8px;margin-top:20px}
+    #tooltip{background:#e30613;color:#fff;border-radius:4px;padding:8px 12px;font-size:14px;position:absolute;z-index:1000;visibility:hidden}
+    select{padding:8px;border-radius:4px;border:none;font-size:16px;background-color:#9ecfab;box-shadow:0 2px 4px rgba(0,0,0,0.1);color:#333}
+    .node rect:hover{fill-opacity:.8;cursor:pointer}
+    .node rect{stroke:#fff;stroke-width:2px}
+    .link{stroke:#de8500;stroke-opacity:.7}
+    text{fill:#333;font-weight:bold;font-size:12px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;max-width:140px}
+    @media(max-width:768px){body{padding:10px}.sankey-container{margin:10px;flex-direction:column}select{width:calc(100% - 40px)}}
+    .sankey-container{width:100%;max-width:1200px;margin:20px auto}
+    /* info boxes */
+    .info-box{position:fixed;top:20px;padding:10px;border:1px solid #ccc;background-color:#fff;max-height:90vh;overflow-y:auto;width:20%;text-align:center;display:flex;flex-direction:column;justify-content:center;z-index:20}
+    #lawRefRight{left:10px}#lawRefObligations{right:10px}
+    /* wrapper + back btn */
+    #sankey-wrapper{position:relative;margin-top:60px}
+    .sankey-topbar{position:absolute;top:-60px;left:0;right:0;height:40px;display:flex;justify-content:center;align-items:center;pointer-events:none}
+    #back-button{pointer-events:auto;background:#006233;color:#fff;padding:8px 18px;border-radius:8px;text-decoration:none;font-size:16px;z-index:15;transition:background .2s}
+    #back-button:hover{background:#004d1a}
+    /* feedback panel (unchanged) */
+    #feedback-panel{background:#f9f9f9;padding:20px;border-radius:10px;width:50%;margin:auto}
+    #feedback-panel h3{margin-bottom:20px}
+    #feedback-panel label{display:block;margin-bottom:5px;font-weight:bold}
+    #feedback-panel textarea{width:100%;height:100px;padding:10px;border-radius:4px;border:1px solid #ccc;box-sizing:border-box;margin-bottom:0}
+    #submit-feedback{padding:10px 20px;background:#006233;color:#fff;border:none;border-radius:5px;cursor:pointer;margin-top:0}
+    input,textarea,select{width:100%;padding:8px;font-size:16px;border:1px solid #ccc;border-radius:5px;margin-bottom:15px}
+    textarea{height:120px;resize:vertical}
+    input::placeholder,textarea::placeholder{font-size:14px;color:#888}
   </style>
+  <!-- ================== LIBS ================== -->
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
+  <!-- ================== FIXED INFO BOXES ================== -->
   <div id="lawRefRight" class="info-box">Cliquez sur un droit pour voir sa référence de loi.</div>
   <div id="lawRefObligations" class="info-box">Cliquez sur un devoir pour voir sa référence de loi.</div>
+
+  <!-- ================== SANKEY WRAPPER ================== -->
   <div id="sankey-wrapper" class="sankey-container">
-    <div class="sankey-topbar">
-        <a href="home.html" id="back-button">← Retour</a>
-    </div>
-
+    <div class="sankey-topbar"><a href="home.html" id="back-button">← Retour</a></div>
     <div id="sankey"></div>
-</div>
+  </div>
 
-  <div id="tooltip" style="position: absolute; visibility: hidden; background: lightgrey; border: 1px solid black; padding: 5px; border-radius: 5px;"></div>
+  <div id="tooltip" style="position:absolute;visibility:hidden;background:lightgrey;border:1px solid #000;padding:5px;border-radius:5px"></div>
 
-  <!-- Feedback Panel -->
+  <!-- ================== FEEDBACK PANEL (unchanged) ================== -->
   <div id="feedback-panel">
     <h3>Feedback</h3>
     <label for="user-name">Nom & Prénom</label>
-    <input type="text" id="user-name" placeholder="Enter your name">
+    <input id="user-name" type="text" placeholder="Enter your name" />
     <label for="user-email">Adresse Mail</label>
-    <input type="email" id="user-email" placeholder="Enter your email">
-    <!-- Now, because this is the rights view, we populate the dropdown with obligations -->
+    <input id="user-email" type="email" placeholder="Enter your email" />
     <label for="obligation-select">Sélectionnez le devoir concerné :</label>
-    <select id="obligation-select">
-      <!-- Options will be populated dynamically -->
-    </select>
+    <select id="obligation-select"></select>
     <label for="feedback-text">Votre Feedback:</label>
     <textarea id="feedback-text" placeholder="Rédigez votre feedback ici..."></textarea>
     <button id="submit-feedback">Send Feedback</button>
   </div>
 
+  <!-- ================== SCRIPT ================== -->
   <script>
-    // Initialize EmailJS
+    /* ---------- INIT EMAILJS ---------- */
     emailjs.init("PgWfRZz3jiAZACZXI");
 
-    async function fetchData() {
-      const response = await fetch('data/output.json');
-      return await response.json();
-    }
+    /* ---------- HELPERS ---------- */
+    async function fetchData(){return fetch('data/output.json').then(r=>r.json())}
+    function getUrlParameter(name){name=name.replace(/[\[]/,'\\[').replace(/[\]]/,'\\]');const regex=new RegExp('[\\?&]'+name+'=([^&#]*)');const results=regex.exec(location.search);return results===null?'':decodeURIComponent(results[1].replace(/\+/g,' '))}
 
-    function getUrlParameter(name) {
-      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-      const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-      const results = regex.exec(location.search);
-      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-    }
+    /* ---------- PAGE LOAD ---------- */
+    (async function init(){
+      const rawData   = await fetchData();
+      const rightId   = getUrlParameter('rightId').trim();
+      const focused   = rawData.find(d=>d.right.trim()===rightId);
+      if(!focused){document.getElementById('sankey').textContent='No data found for this right.';return;}
+      const sankeyData= transformForSankey(focused);
+      drawSankey(sankeyData,focused);
+      populateObligationsDropdown(focused.obligations);
+    })();
 
-    // In this rights view, we filter by rightId and then use the obligations from that right.
-    async function init() {
-      const rawData = await fetchData();
-      const rightId = getUrlParameter('rightId').trim();
-      // Filter rawData to find the right that matches
-      const focusedData = rawData.filter(d => d.right.trim() === rightId);
-      
-      if (focusedData.length > 0) {
-        // Draw Sankey diagram for the right (using the first match)
-        const sankeyData = transformDataForSankey(focusedData[0]);
-        drawSankey(sankeyData, focusedData[0]);
-        // Populate the dropdown with obligations from the right
-        populateObligationsDropdown(focusedData[0].obligations);
-      } else {
-        document.getElementById('sankey').innerHTML = 'No data found for this right.';
-      }
-    }
-
-    const tooltip = d3.select("#tooltip");
-
-    function transformDataForSankey(data) {
-      let nodes = [], links = [];
-      const nodeById = new Map();
-
-      // Create a node for the right
-      const rightNode = { id: data.right, type: 'right', lawRef: data.lawRef };
-      nodes.push(rightNode);
-      nodeById.set(data.right, rightNode);
-
-      // Create a node for each obligation
-      data.obligations.forEach(ob => {
-        const obNode = { id: ob.name, type: 'obligation', lawRef: ob.lawRef };
-        if (!nodeById.has(ob.name)) {
-          nodes.push(obNode);
-          nodeById.set(ob.name, obNode);
-        }
-        links.push({ source: obNode, target: rightNode, value: 1 });
+    /* ---------- TRANSFORM DATA ---------- */
+    function transformForSankey(data){
+      const nodes=[],links=[],byId=new Map();
+      const rightNode={id:data.right,type:'right',lawRef:data.lawRef};
+      nodes.push(rightNode);byId.set(rightNode.id,rightNode);
+      data.obligations.forEach(ob=>{
+        let n=byId.get(ob.name);
+        if(!n){n={id:ob.name,type:'obligation',lawRef:ob.lawRef};nodes.push(n);byId.set(n.id,n);}
+        links.push({source:n,target:rightNode,value:1});
       });
-
-      return { nodes, links };
+      return {nodes,links};
     }
 
-    function drawSankey(data, focusedData) {
-      const margin = { top: 30, right: 200, bottom: 30, left: 200 };
-      const width = 700;
-      const height = 300;
-      d3.select("#sankey").selectAll("*").remove();
-      const svg = d3.select("#sankey").append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    /* ---------- DRAW SANKEY ---------- */
+    function drawSankey(data,focusedData){
+      const margin={top:30,right:200,bottom:30,left:200},width=700,height=300;
+      d3.select('#sankey').selectAll('*').remove();
+      const svg=d3.select('#sankey').append('svg')
+                  .attr('width',width+margin.left+margin.right)
+                  .attr('height',height+margin.top+margin.bottom)
+                  .append('g')
+                  .attr('transform',`translate(${margin.left},${margin.top})`);
+      const sankey=d3.sankey().nodeWidth(20).nodePadding(40).extent([[margin.left,margin.top],[width-margin.right,height-margin.bottom]]);
+      const {nodes,links}=sankey(data);
 
-      const sankey = d3.sankey()
-          .nodeWidth(20)
-          .nodePadding(40)
-          .extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]]);
+      /* ---- populate info boxes initially ---- */
+      updateLawRefs();
 
-      const { nodes, links } = sankey(data);
+      /* ---- NODES ---- */
+      svg.append('g').selectAll('rect').data(nodes).enter().append('rect')
+         .classed('node',true)
+         .attr('x',d=>d.x0).attr('y',d=>d.y0)
+         .attr('height',d=>d.y1-d.y0).attr('width',sankey.nodeWidth())
+         .attr('fill',d=>d.type==='right'?'#006233':'#c1272d');
 
-      svg.append("g")
-          .selectAll("rect")
-          .data(nodes)
-          .enter().append("rect")
-          .classed("node", true)
-          .attr("x", d => d.x0)
-          .attr("y", d => d.y0)
-          .attr("height", d => d.y1 - d.y0)
-          .attr("width", sankey.nodeWidth())
-          .attr("fill", d => d.type === 'right' ? "#006233" : "#c1272d");
+      /* ---- LINKS ---- */
+      svg.append('g').attr('fill','none').selectAll('path').data(links).enter().append('path')
+         .classed('link',true)
+         .attr('d',d3.sankeyLinkHorizontal())
+         .attr('stroke','#76b7b2').attr('stroke-width',d=>Math.max(1,d.width));
 
-      svg.append("g")
-          .attr("fill", "none")
-          .selectAll("path")
-          .data(links)
-          .enter().append("path")
-          .classed("link", true)
-          .attr("d", d3.sankeyLinkHorizontal())
-          .attr("stroke", "#76b7b2")
-          .attr("stroke-width", d => Math.max(1, d.width));
+      /* ---- LABELS ---- */
+      svg.append('g').selectAll('text').data(nodes).enter().append('text')
+         .attr('x',d=>d.type==='obligation'?d.x0-10:d.x1+10)
+         .attr('y',d=>(d.y1+d.y0)/2)
+         .attr('dy','0.35em')
+         .attr('text-anchor',d=>d.type==='obligation'?'end':'start')
+         .text(d=>d.id);
 
-      svg.append("g")
-          .selectAll("text")
-          .data(nodes)
-          .enter().append("text")
-          .attr("x", d => d.type === "obligation" ? d.x0 - 10 : d.x1 + 10)
-          .attr("y", d => (d.y1 + d.y0) / 2)
-          .attr("dy", "0.35em")
-          .attr("text-anchor", d => d.type === "obligation" ? "end" : "start")
-          .text(d => d.id)
-          .style("fill", "black");
+      /* ---- INTERACTION ---- */
+      function resetStyles(){svg.selectAll('.node, .link').style('opacity',1)}
+      d3.select('#sankey > svg').on('click',()=>{resetStyles();tooltip.style('visibility','hidden')});
+      function highlight(selected){const connected=new Set([selected.id]);svg.selectAll('.link').style('stroke-opacity',d=>{const ok=d.source.id===selected.id||d.target.id===selected.id;if(ok){connected.add(d.source.id);connected.add(d.target.id);}return ok?0.8:0.1});svg.selectAll('.node rect').style('opacity',d=>connected.has(d.id)?1:0.1)}
+      svg.selectAll('.node').on('click',(event,d)=>{highlight(d);updateLawRefs(d)});
 
-      function resetStyles() {
-        svg.selectAll(".node, .link")
-            .style("opacity", 1);
-      }
-
-      d3.select("#sankey > svg").on("click", function(event) {
-        resetStyles();
-        tooltip.style("visibility", "hidden");
-      });
-
-      function highlightNodeAndConnections(selectedNode) {
-        const connectedNodes = new Set([selectedNode.id]);
-        svg.selectAll(".link")
-            .style("stroke-opacity", function(d) {
-              const isSourceOrTarget = d.source.id === selectedNode.id || d.target.id === selectedNode.id;
-              if (isSourceOrTarget) {
-                connectedNodes.add(d.source.id);
-                connectedNodes.add(d.target.id);
-              }
-              return isSourceOrTarget ? 0.8 : 0.1;
-            });
-        svg.selectAll(".node rect")
-            .style("opacity", d => connectedNodes.has(d.id) ? 1 : 0.1);
-      }
-
-      svg.selectAll(".node")
-          .on("click", function(event, d) {
-            highlightNodeAndConnections(d);
-            if (d.type === "right") {
-              updateLawRefs(d);
-            } else {
-              updateLawRefs();
-            }
-          });
-
-      function updateLawRefs(clickedNode = null) {
-        const lawRefRightElement = document.getElementById('lawRefRight');
-        const lawRefObligationsElement = document.getElementById('lawRefObligations');
-
-        if (clickedNode && clickedNode.type === "right") {
-          lawRefRightElement.innerHTML = `<strong>${clickedNode.id}<br/></strong> ${clickedNode.lawRef}`;
-        } else {
-          lawRefRightElement.innerHTML = "Cliquez sur un droit pour voir sa référence de loi.";
-        }
-
-        if (clickedNode && clickedNode.type === "obligation") {
-          lawRefObligationsElement.innerHTML = `<strong>${clickedNode.id}<br/></strong> ${clickedNode.lawRef}`;
-        } else {
-          // If no obligation is clicked, show the first one by default
-          if (focusedData.obligations && focusedData.obligations.length > 0) {
-            lawRefObligationsElement.innerHTML = `<strong>${focusedData.obligations[0].name}<br/></strong> ${focusedData.obligations[0].lawRef}`;
-          }
+      /* ---- INFO BOX UPDATE ---- */
+      function updateLawRefs(clicked=null){
+        const rightBox=document.getElementById('lawRefRight');
+        const obBox   =document.getElementById('lawRefObligations');
+        /* always show the single right's reference */
+        rightBox.innerHTML=`<strong>${focusedData.right}<br/></strong> ${focusedData.lawRef}`;
+        /* obligation box */
+        if(clicked&&clicked.type==='obligation'){
+          obBox.innerHTML=`<strong>${clicked.id}<br/></strong> ${clicked.lawRef}`;
+        }else if(focusedData.obligations&&focusedData.obligations.length){
+          obBox.innerHTML=`<strong>${focusedData.obligations[0].name}<br/></strong> ${focusedData.obligations[0].lawRef}`;
+        }else{
+          obBox.innerHTML='Aucune obligation liée.';
         }
       }
-
-      svg.on("click", resetStyles);
     }
 
-    // Populate the dropdown with obligations from the right
-    function populateObligationsDropdown(obligations) {
-      const obligationSelect = document.getElementById('obligation-select');
-      obligationSelect.innerHTML = ''; // Clear any existing options
-      obligations.forEach(ob => {
-        const option = document.createElement('option');
-        option.value = ob.name;
-        option.textContent = ob.name;
-        obligationSelect.appendChild(option);
-      });
+    /* ---------- POPULATE DROPDOWN ---------- */
+    function populateObligationsDropdown(obligations){
+      const sel=document.getElementById('obligation-select');sel.innerHTML='';
+      obligations.forEach(o=>{const opt=document.createElement('option');opt.value=o.name;opt.textContent=o.name;sel.appendChild(opt)});
     }
 
-    // Submit feedback and send email via EmailJS
-    document.getElementById('submit-feedback').addEventListener('click', function() {
-      const userName = document.getElementById('user-name').value.trim();
-      const userEmail = document.getElementById('user-email').value.trim();
-      const selectedObligation = document.getElementById('obligation-select').value.trim();
-      const feedbackText = document.getElementById('feedback-text').value.trim();
-      if (userName && userEmail && selectedObligation && feedbackText) {
-        const templateParams = {
-          user_name: userName,
-          user_email: userEmail,
-          obligation_name: selectedObligation,
-          // Optionally send the right id or lawRef as well if needed:
-          right_name: getUrlParameter('rightId').trim(),
-          feedback_text: feedbackText,
-        };
-
-        emailjs.send("serviceO_n8bxp2s", "template_jtuka14", templateParams)
-          .then(function(response) {
-            console.log('SUCCESS!', response);
-            alert('Feedback sent successfully!');
-          }, function(error) {
-            console.error('FAILED...', error);
-            alert('There was an issue sending your feedback. Please try again.');
-          });
-      } else {
-        alert('Please fill in all fields.');
-      }
+    /* ---------- FEEDBACK HANDLER (unchanged) ---------- */
+    document.getElementById('submit-feedback').addEventListener('click',()=>{
+      const name=document.getElementById('user-name').value.trim();
+      const email=document.getElementById('user-email').value.trim();
+      const ob=document.getElementById('obligation-select').value.trim();
+      const msg=document.getElementById('feedback-text').value.trim();
+      if(name&&email&&ob&&msg){
+        emailjs.send("serviceO_n8bxp2s","template_jtuka14",{user_name:name,user_email:email,obligation_name:ob,right_name:getUrlParameter('rightId').trim(),feedback_text:msg})
+               .then(()=>alert('Feedback sent successfully!'))
+               .catch(()=>alert('There was an issue sending your feedback. Please try again.'));
+      }else{alert('Please fill in all fields.');}
     });
-
-    init();
   </script>
 </body>
 </html>
