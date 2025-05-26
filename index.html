@@ -1,14 +1,32 @@
-<!-- mahdiihdeme98.github.io/index.html -->
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting …</title>
+
+  <!-- Device-aware redirect -->
+  <script>
     (function () {
-      const isMobile = window.innerWidth <= 768 ||
+      const isMobile =
+            window.innerWidth <= 768 ||
             /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
               .test(navigator.userAgent);
-    
+
       const target = isMobile
-          ? '/RightsObligationsWebApp/mobile.html'
-          : '/RightsObligationsWebApp/';
-    
+        ? '/RightsObligationsWebApp/mobile.html'
+        : '/RightsObligationsWebApp/';
+
       location.replace(target);
     })();
-    </script>
+  </script>
+
+  <!-- Fallback for users with JS disabled -->
+  <noscript>
+    <meta http-equiv="refresh"
+          content="0; url=/RightsObligationsWebApp/" />
+  </noscript>
+</head>
+<body>
+  <p>Redirecting …</p>
+</body>
+</html>
