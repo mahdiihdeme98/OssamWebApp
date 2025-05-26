@@ -6,19 +6,30 @@
 
   <!-- Device-aware redirect -->
   <script>
+    /* Redirect to the mobile or desktop build of RightsObligationsWebApp */
     (function () {
-      const isMobile =
-            window.innerWidth <= 768 ||
-            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-              .test(navigator.userAgent);
-
+      /* 1.  Robust mobile test  */
+      const ua  = (navigator.userAgent || "").toLowerCase();
+      const uaIsMobile =
+          /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/.test(ua);
+    
+      /* 2.  Fallback: small viewport (covers tablets in landscape etc.) */
+      const smallViewport = window.matchMedia("(max-width: 768px)").matches;
+    
+      const isMobile = uaIsMobile || smallViewport;
+    
+      /* 3.  Decide the destination */
       const target = isMobile
-        ? '/RightsObligationsWebApp/mobile.html'
-        : '/RightsObligationsWebApp/';
-
-      location.replace(target);
+          ? "/RightsObligationsWebApp/mobile.html"
+          : "/RightsObligationsWebApp/";
+    
+      /* 4.  Jump only if we aren’t already there */
+      if (location.pathname !== target) {
+        location.replace(target);
+      }
     })();
-  </script>
+    </script>
+    
 
   <!-- Fallback for users with JS disabled -->
   <noscript>
