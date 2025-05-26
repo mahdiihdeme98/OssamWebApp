@@ -6,15 +6,18 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <script>
         (function () {
-          const isMobile = window.innerWidth <= 768 ||
-                           /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-                             .test(navigator.userAgent);
-          if (isMobile && !location.pathname.endsWith('mobile.html')) {
-            // prevents endless loop if user already on mobile page
-            location.replace('mobile.html');
-          }
+          const isMobile =
+                window.innerWidth <= 768 ||
+                /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+                  .test(navigator.userAgent);
+        
+          const target = isMobile
+            ? '/RightsObligationsWebApp/mobile.html'   // phone / tablet
+            : '/RightsObligationsWebApp/';            // desktop
+        
+          location.replace(target);                   // do the redirect
         })();
-      </script>      
+        </script>     
     <title>Home - Droits & Obligations</title>
     <style>
         * {
