@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <title>Home ‑ Droits & Obligations</title>
+    <title>Home - Droits & Obligations</title>
 
     <!-- EmailJS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -12,42 +12,55 @@
     <style>
         /* ============ 1) GLOBAL RESET ============ */
         *{box-sizing:border-box;margin:0;padding:0;}
-        html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;background:#f4f4f4;color:#333;line-height:1.5;text-align:center;padding:20px;}
+        html,body{
+            font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+            background:#f4f4f4;color:#333;line-height:1.5;text-align:center;padding:20px;
+        }
         img{max-width:100%;display:block;}
 
         /* ============ 2) INTRO SECTION ============ */
-        .container{max-width:900px;margin:40px auto;background:#fff;padding:40px;border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,.05);}
+        .container{
+            max-width:900px;margin:40px auto;background:#fff;padding:40px;border-radius:16px;
+            box-shadow:0 8px 20px rgba(0,0,0,.05);
+        }
         .logo{width:200px;margin:0 auto 20px;}
         h1{font-size:28px;font-weight:600;margin-bottom:16px;}
         p{font-size:17px;color:#555;margin-bottom:16px;}
-        .start-button{display:inline-block;padding:12px 24px;font-size:16px;color:#fff;background:#006233;border:none;border-radius:8px;cursor:pointer;transition:background-color .2s;}
+        .start-button{
+            display:inline-block;padding:12px 24px;font-size:16px;color:#fff;background:#006233;
+            border:none;border-radius:8px;cursor:pointer;transition:background-color .2s;
+        }
         .start-button:hover{background:#004d1a;}
         .section{margin-top:40px;padding-top:20px;border-top:1px solid #eee;text-align:left;}
         .section h2{font-size:22px;margin-bottom:12px;color:#333;}
 
         /* ============ 3) EXPLORER SCREEN ============ */
-        #explorer-screen{display:none;max-width:900px;margin:40px auto;background:#fff;border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,.05);padding:40px;text-align:left;}
+        #explorer-screen{
+            display:none;max-width:900px;margin:40px auto;background:#fff;border-radius:16px;
+            box-shadow:0 8px 20px rgba(0,0,0,.05);padding:40px;text-align:left;
+        }
         .header-explorer{text-align:center;position:relative;margin-bottom:20px;}
         .logo-explorer{width:180px;margin:0 auto 4px;}
-        .stylish-separator{border:0;height:1px;width:100%;background:linear-gradient(to right,transparent,#ccc,transparent);margin:16px 0 30px;}
-        .back-button{display:inline-block;margin-top:8px;padding:8px 16px;background:#f2f2f2;border:none;border-radius:8px;color:#333;font-size:14px;cursor:pointer;transition:.2s;}
+        .stylish-separator{
+            border:0;height:1px;width:100%;background:linear-gradient(to right,transparent,#ccc,transparent);margin:16px 0 30px;
+        }
+        .back-button{
+            display:inline-block;margin-top:8px;padding:8px 16px;background:#f2f2f2;border:none;
+            border-radius:8px;color:#333;font-size:14px;cursor:pointer;transition:.2s;
+        }
         .back-button:hover{background:#e0e0e0;}
 
         .step-heading{font-size:20px;font-weight:600;margin-bottom:10px;text-align:center;}
         .step-subtitle{font-size:15px;color:#777;text-align:center;margin-bottom:20px;}
-        .right-reference{
-        font-size:14px;
-        color:#555;
-        margin-top:-8px;   /* tucks it right under the subtitle */
-        margin-bottom:20px;
-        text-align:center;
-    }
-
+        .right-reference{font-size:14px;color:#555;margin-top:-8px;margin-bottom:20px;text-align:center;}
 
         /* ============ 4) LISTS & CARDS ============ */
         ul{list-style:none;padding:0;margin:0;}
         li{margin-bottom:16px;}
-        .card{background:#fff;border-radius:8px;padding:16px;box-shadow:0 2px 4px rgba(0,0,0,.05);cursor:pointer;transition:.2s;}
+        .card{
+            background:#fff;border-radius:8px;padding:16px;box-shadow:0 2px 4px rgba(0,0,0,.05);
+            cursor:pointer;transition:.2s;
+        }
         .card:hover{transform:translateY(-2px);box-shadow:0 6px 12px rgba(0,0,0,.07);}
         .card h3{font-size:16px;color:#333;margin-bottom:6px;}
         .card p{margin:0;font-size:14px;color:#666;}
@@ -55,25 +68,81 @@
         .obligation-content{display:none;margin-top:12px;font-size:14px;color:#444;}
         .obligation-content.active{display:block;}
 
-        /* ============ 5) FEEDBACK PANEL (Step 3 only) ============ */
-        #feedback-panel{display:none;margin-top:30px;padding:20px;background:#f9f9f9;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.05);}
+        /* ============ 5) FEEDBACK PANEL (Step 3) ============ */
+        #feedback-panel{
+            display:none;margin-top:30px;padding:20px;background:#f9f9f9;border-radius:12px;
+            box-shadow:0 4px 12px rgba(0,0,0,.05);
+        }
         .fp-title{text-align:center;margin-bottom:14px;font-size:18px;font-weight:600;}
-        #feedback-panel label{display:block;font-weight:600;margin-bottom:4px;text-align:left;font-size:14px;}
-        #feedback-panel input,#feedback-panel textarea,#feedback-panel select{width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;font-size:14px;margin-bottom:14px;}
+        #feedback-panel label{
+            display:block;font-weight:600;margin-bottom:4px;text-align:left;font-size:14px;
+        }
+        #feedback-panel input,#feedback-panel textarea,#feedback-panel select{
+            width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;font-size:14px;margin-bottom:14px;
+        }
         #feedback-panel textarea{resize:vertical;height:110px;}
         .fp-locked{font-weight:600;color:#006233;margin-bottom:14px;text-align:left;}
-        #submit-feedback{width:100%;padding:12px;background:#006233;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}
+        #submit-feedback{
+            width:100%;padding:12px;background:#006233;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;
+        }
         #submit-feedback:active{transform:scale(.98);}
 
+        /* ============ 6) CLUSTER CAROUSEL ============ */
+        #clusters-carousel-section{margin-top:34px;text-align:center;}
+        #clusters-carousel-section h3{font-size:18px;margin-bottom:12px;color:#333;}
 
-        /* ============ 6) RESPONSIVE TWEAKS ============ */
+        .carousel-container{overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;}
+        .carousel-track{
+            display:flex;gap:14px;padding-bottom:6px;
+            align-items:flex-start;
+        }
+        .carousel-item{
+            flex:0 0 80%;max-width:80%;
+            border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.08);
+            display:flex;flex-direction:column;scroll-snap-align:center;background:#fff;
+            cursor:pointer;
+        }
+        .carousel-item:hover{box-shadow:0 6px 14px rgba(0,0,0,.1);}
+        .carousel-caption{
+            background:#555;color:#fff;font-size:14px;font-weight:600;
+            padding:8px 10px;text-align:center;
+        }
+        .carousel-item img{width:100%;height:auto;display:block;}
+
+        .carousel-container::-webkit-scrollbar{display:none;}
+
+        /* ============ 7) IMAGE MODAL ============ */
+        #image-modal{
+            position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+            background:rgba(0,0,0,.85);z-index:10000;
+        }
+        #image-modal img{max-width:92%;max-height:80vh;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.4);}
+        #modal-caption{color:#fff;font-size:16px;margin-top:12px;text-align:center;}
+        #modal-close{
+            position:absolute;top:20px;right:24px;font-size:34px;color:#fff;cursor:pointer;
+            line-height:1;font-weight:700;
+        }
+
+        /* ============ 8) RESPONSIVE TWEAKS ============ */
         @media(max-width:768px){
             .container,#explorer-screen{margin:20px auto;padding:20px;}
-            .logo{width:160px;}h1{font-size:24px;}.section h2{font-size:18px;}.logo-explorer{width:140px;}
+            .logo{width:160px;}
+            h1{font-size:24px;}
+            .section h2{font-size:18px;}
+            .logo-explorer{width:140px;}
         }
     </style>
 </head>
 <body>
+
+<!-- ========= MODAL (hidden by default) ========= -->
+<div id="image-modal" onclick="closeImageModal(event)">
+    <span id="modal-close">×</span>
+    <div>
+        <img id="modal-img" src="" alt="">
+        <div id="modal-caption"></div>
+    </div>
+</div>
 
 <!-- ========== A) INTRO SECTION ========== -->
 <div class="container" id="intro-container">
@@ -87,7 +156,7 @@
     <button class="start-button" onclick="showExplorer()">Explorer</button>
 
     <div class="section">
-        <h2>Qui sommes‑nous ?</h2>
+        <h2>Qui sommes-nous ?</h2>
         <p>
             <strong>OSSAM</strong> est une initiative portée par des jeunes Marocains visant à <strong>reconnecter la science, 
             l'éducation et l'art</strong> pour façonner un avenir meilleur pour <strong>notre pays</strong>. 
@@ -105,30 +174,38 @@
 <div id="explorer-screen">
     <div class="header-explorer">
         <img src="Logo_Ocre.png" class="logo-explorer" alt="Logo">
-        <button class="back-button" onclick="hideExplorer()">← Retour</button>
+        <button class="back-button" onclick="hideExplorer()">← Retour</button>
         <hr class="stylish-separator">
-        <h2>Explorer : Droits & Obligations</h2>
+        <h2>Explorer : Droits & Obligations</h2>
     </div>
 
-    <!-- Step 1 -->
+    <!-- Step 1 -->
     <div id="clusters-view">
-        <h2 class="step-heading">Étape 1 : Choisir un Cluster</h2>
+        <h2 class="step-heading">Étape 1 : Choisir un Cluster</h2>
         <p class="step-subtitle">Sélectionnez un domaine pour voir les droits associés.</p>
         <ul id="clusters-list"></ul>
+
+        <!-- **** CAROUSEL **** -->
+        <div id="clusters-carousel-section">
+            <h3>Cartographie visuelle</h3>
+            <div class="carousel-container">
+                <div class="carousel-track" id="carousel-track"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- Step 2 -->
+    <!-- Step 2 -->
     <div id="rights-view" style="display:none;">
-        <button class="back-button" onclick="goBackToClusters()" style="margin-bottom:20px;">← Retour Clusters</button>
-        <h2 class="step-heading">Étape 2 : Choisir un Droit</h2>
+        <button class="back-button" onclick="goBackToClusters()" style="margin-bottom:20px;">← Retour Clusters</button>
+        <h2 class="step-heading">Étape 2 : Choisir un Droit</h2>
         <p class="step-subtitle">Dans le cluster <span id="current-cluster"></span></p>
         <ul id="rights-list"></ul>
     </div>
 
-    <!-- Step 3 -->
+    <!-- Step 3 -->
     <div id="obligations-view" style="display:none;">
-        <button class="back-button" onclick="goBackToRights()" style="margin-bottom:20px;">← Retour Droits</button>
-        <h2 class="step-heading">Étape 3 : Consulter les Obligations</h2>
+        <button class="back-button" onclick="goBackToRights()" style="margin-bottom:20px;">← Retour Droits</button>
+        <h2 class="step-heading">Étape 3 : Consulter les Obligations</h2>
         <p class="step-subtitle">Liées au droit <span id="current-right"></span></p>
         <p id="current-right-ref" class="right-reference"></p>
         <ul id="obligations-list"></ul>
@@ -142,7 +219,7 @@
             <label for="obligation-select">Choisissez l'obligation</label>
             <select id="obligation-select"></select>
 
-            <label for="user-name">Nom & Prénom</label>
+            <label for="user-name">Nom & Prénom</label>
             <input id="user-name" type="text" placeholder="Votre nom">
 
             <label for="user-email">Adresse mail</label>
@@ -179,21 +256,38 @@ function hideExplorer(){
     document.getElementById('intro-container').style.display='block';
 }
 
-/* ------------ STEP 1 : CLUSTERS ------------ */
+/* ------------ STEP 1 : CLUSTERS ------------ */
 function showClusters(){
     toggleViews('clusters-view');
     const ul = document.getElementById('clusters-list');
+    const track = document.getElementById('carousel-track');
     ul.innerHTML='';
-    [...new Set(rawData.map(d=>d.cluster))].forEach(cluster=>{
+    track.innerHTML='';
+
+    const clustersArray = [...new Set(rawData.map(d => d.cluster))];
+
+    clustersArray.forEach(cluster=>{
+        /* ---- List item ---- */
         const li=document.createElement('li');
         li.innerHTML=`<div class="card"><h3>${cluster}</h3></div>`;
         li.firstChild.onclick=()=>showRights(cluster);
         ul.appendChild(li);
+
+        /* ---- Carousel item ---- */
+        const item = document.createElement('div');
+        item.className = 'carousel-item';
+        item.innerHTML = `
+            <div class="carousel-caption">${cluster}</div>
+            <img src="clusters/${cluster}.png" alt="${cluster}">
+        `;
+        item.onclick=()=>openImageModal(`clusters/${cluster}.png`, cluster);
+        track.appendChild(item);
     });
-    hideFeedback();   // make sure panel is hidden
+
+    hideFeedback();
 }
 
-/* ------------ STEP 2 : RIGHTS ------------ */
+/* ------------ STEP 2 : RIGHTS ------------ */
 function showRights(cluster){
     currentCluster=cluster;
     document.getElementById('current-cluster').textContent=cluster;
@@ -211,7 +305,7 @@ function showRights(cluster){
 }
 function goBackToClusters(){showClusters();}
 
-/* ------------ STEP 3 : OBLIGATIONS ------------ */
+/* ------------ STEP 3 : OBLIGATIONS ------------ */
 function showObligations(rightName){
     currentRight=rightName;
     document.getElementById('current-right').textContent=rightName;
@@ -221,18 +315,15 @@ function showObligations(rightName){
     obligationsUl.innerHTML='';
 
     const item=rawData.find(d=>d.cluster===currentCluster && d.right===rightName);
-    // Show the legal reference just under the subtitle
-    document.getElementById('current-right-ref').textContent =
-        item ? item.lawRef : '';
+    document.getElementById('current-right-ref').textContent = item ? item.lawRef : '';
 
     if(!item){obligationsUl.innerHTML='<li>Aucune obligation trouvée.</li>';hideFeedback();return;}
 
-    // list of obligations
     item.obligations.forEach(ob=>{
         const li=document.createElement('li');
         li.innerHTML=`<div class="card">
                          <div class="obligation-toggle"><h3>${ob.name}</h3><span>▼</span></div>
-                         <div class="obligation-content"><p><strong>Référence légale :</strong><br>${ob.lawRef}</p></div>
+                         <div class="obligation-content"><p><strong>Référence légale :</strong><br>${ob.lawRef}</p></div>
                        </div>`;
         const toggle=li.querySelector('.obligation-toggle');
         const content=li.querySelector('.obligation-content');
@@ -240,7 +331,7 @@ function showObligations(rightName){
         obligationsUl.appendChild(li);
     });
 
-    // ----- FEEDBACK PANEL -----
+    /* ----- FEEDBACK PANEL ----- */
     const panel=document.getElementById('feedback-panel');
     panel.style.display='block';
     document.getElementById('locked-right').textContent=rightName;
@@ -255,6 +346,20 @@ function showObligations(rightName){
 }
 function goBackToRights(){showRights(currentCluster);}
 
+/* ------------ IMAGE MODAL ------------ */
+function openImageModal(src, caption){
+    document.getElementById('modal-img').src = src;
+    document.getElementById('modal-caption').textContent = caption;
+    document.getElementById('image-modal').style.display='flex';
+}
+function closeImageModal(e){
+    // Close only if click outside image or on the X
+    if(e.target.id==='image-modal' || e.target.id==='modal-close'){
+        document.getElementById('image-modal').style.display='none';
+        document.getElementById('modal-img').src='';
+    }
+}
+
 /* ------------ FEEDBACK SEND ------------ */
 document.getElementById('submit-feedback').addEventListener('click',()=>{
     const params={
@@ -268,7 +373,7 @@ document.getElementById('submit-feedback').addEventListener('click',()=>{
         alert('Veuillez remplir tous les champs.');return;
     }
     emailjs.send('serviceO_n8bxp2s','template_jtuka14',params)
-           .then(()=>{alert('Merci pour votre retour !');clearFeedbackForm();})
+           .then(()=>{alert('Merci pour votre retour !');clearFeedbackForm();})
            .catch(()=>alert('Erreur lors de l’envoi, réessayez.'));
 });
 
@@ -281,7 +386,6 @@ function hideFeedback(){document.getElementById('feedback-panel').style.display=
 function clearFeedbackForm(){
     ['user-name','user-email','feedback-text'].forEach(id=>document.getElementById(id).value='');
 }
-
 </script>
 </body>
 </html>
